@@ -10,7 +10,7 @@ function App() {
     <main>
       <h1> Camp Safety</h1>
 
-      <QuestionCard question={questions[0]} />
+      <QuestionCard question={questions[2]} />
     </main>
   )
 }

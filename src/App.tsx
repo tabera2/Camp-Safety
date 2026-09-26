@@ -23,7 +23,9 @@ function App() {
     }
   }
 
-    console.log(answers)
+    //console.log(answers)
+
+    const progress = ((currentQuestion + 1) / questions.length) * 100;
   return (
     <main>
       <h1> Camp Safety</h1>
@@ -34,11 +36,18 @@ function App() {
           <p>Your responses have been recorded.</p>
         </section> 
       ): ( 
+
+
       <QuestionCard 
       question={questions[currentQuestion]}
       onAnswer={handleAnswer}
       />
       )}
+      
+      <p> Question {currentQuestion + 1} of {questions.length}</p>
+      <progress 
+        value={progress}
+        max="100"/>
     </main>
   );
 }

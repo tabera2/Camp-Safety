@@ -1,5 +1,5 @@
 import type { Question } from "../types/assessment";
-export const question: Question[] = [
+export const questions: Question[] = [
     {
         id: 1,
         category: "Emergency Preparedness",

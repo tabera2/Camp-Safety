@@ -1,4 +1,6 @@
 //import { useState } from 'react'
+import QuestionCard from './components/QuestionCard'
+import {questions} from "./data/questions";
 import './App.css'
 
 function App() {
@@ -8,9 +10,7 @@ function App() {
     <main>
       <h1> Camp Safety</h1>
 
-      <p>Identify safety gaps and turn them into actionable recommendations.</p>
-
-      <button type="button">Risk Assessment</button>
+      <QuestionCard question={questions[0]} />
     </main>
   )
 }

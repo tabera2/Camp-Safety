@@ -23,31 +23,46 @@ function App() {
     }
   }
 
+  function handleBack(){
+    if(currentQuestion > 0){
+      setAnswers(answers.slice(0, -1));
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  }
+
     //console.log(answers)
 
     const progress = ((currentQuestion + 1) / questions.length) * 100;
   return (
     <main>
       <h1> Camp Safety</h1>
-
       {isComplete ? (
         <section>
           <h2>Assessment Complete</h2>
           <p>Your responses have been recorded.</p>
         </section> 
-      ): ( 
+      ):( 
+        <>
 
-
-      <QuestionCard 
-      question={questions[currentQuestion]}
-      onAnswer={handleAnswer}
-      />
-      )}
+          <p> Question {currentQuestion + 1} of {questions.length}</p>
+          <progress 
+          value={progress}
+          max="100"/>
       
-      <p> Question {currentQuestion + 1} of {questions.length}</p>
-      <progress 
-        value={progress}
-        max="100"/>
+        <QuestionCard 
+        question={questions[currentQuestion]}
+        onAnswer={handleAnswer}
+        />
+
+        {currentQuestion > 0 &&(
+          <button
+          type="button"
+          onClick={handleBack}>
+            Previous
+          </button>
+      )}
+      </>
+      )}
     </main>
   );
 }

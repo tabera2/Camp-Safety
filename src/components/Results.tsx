@@ -1,10 +1,42 @@
 import type { RiskResult } from "../types/assessment";
+import { useEffect, useState } from "react";
+//import type { RiskResult } from "../types/assessment";
+import { getRecommendations } from "../lib/getRecommendations";
+
+
 
 interface ResultProps{
     result: RiskResult;
 }
 
 function Results({ result }: ResultProps){
+    const [recommendations, setRecommendations] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [recommendationError, setRecommendationError] = useState(false);
+
+    useEffect(() => {
+        async function loadRecommendations() {
+            if(result.gaps.length === 0){
+                return;
+            }
+
+            setIsLoading(true);
+            const response = await getRecommendations(
+                result.score,
+                result.gaps
+            );
+
+            if(response){
+                setRecommendations(response);
+
+            }else{
+                setRecommendationError(true)
+            }
+            setIsLoading(false);
+        }
+        loadRecommendations();
+    }, [result]);
+
     return(
         <section>
             <h2>Assessment Results</h2>
@@ -30,6 +62,24 @@ function Results({ result }: ResultProps){
                     </div>
                 ))
             )}
+            </div>
+
+            {/* Recommendations goes here */}
+            <div>
+                <h3>Recommended Actions</h3>
+                {isLoading && (
+                    <p>Generating recommendations ... </p>
+                )}
+
+                {recommendationError && (
+                    <p>Recommendations are temporarily unavailable.</p>
+                )}
+
+                {recommendations && (
+                    <div>
+                        <p>{recommendations}</p>
+                    </div>
+                )}
             </div>
         </section>
     );

@@ -2,9 +2,9 @@ import {supabase} from "./supabase";
 import type {Answer} from "../types/assessment";
 
 export async function saveAssessment(
-    answer: Answer[],
+    answers: Answer[],
     riskScore: number
-){
+): Promise<boolean> {
     const assessmentId = crypto.randomUUID();
     const {error: assessmentError} = await supabase
     .from("assessments")
@@ -18,10 +18,10 @@ export async function saveAssessment(
             "Error saving assessment:",
             assessmentError
         );
-        return;
+        return false;
     }
 
-    const responseRows = answer.map((answer) => ({
+    const responseRows = answers.map((answer) => ({
         assessment_id: assessmentId,
         question_id: answer.questionId,
         answer: answer.answer,
@@ -36,8 +36,9 @@ export async function saveAssessment(
                 "Error saving responses:",
                 responseError
             );
-            return;
+            return false;
         }
-        console.log("Assessment saved successfully");
+        //console.log("Assessment saved successfully");
+        return true;
     
 }

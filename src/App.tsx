@@ -15,7 +15,7 @@ function App() {
   const [answers, setAnswers] = useState<Answer[]>([])
   const [isComplete, setIsComplete] = useState(false)
 
-  function handleAnswer(answer: string) {
+  async function handleAnswer(answer: string) {
     const newAnswer: Answer = {
       questionId: questions[currentQuestion].id,
       answer: answer,
@@ -28,8 +28,17 @@ function App() {
       setCurrentQuestion(currentQuestion + 1);
     }else{
       const result = calculatedRisk(updatedAnswers);
-      console.log("Calling saveAssessment");
-      saveAssessment(updatedAnswers, result.score);
+      //console.log("Calling saveAssessment");
+
+      const saved = await saveAssessment(
+        updatedAnswers,
+        result.score
+      );
+
+      if(!saved){
+        console.error("Assessment could not be saved.");
+      }
+      //saveAssessment(updatedAnswers, result.score);
       setIsComplete(true);
     }
   }

@@ -26,31 +26,34 @@ function Results({ result, onRestart }: ResultProps){
     const [recommendationError, setRecommendationError] = useState(false);
     const hasRequestedRecommendations = useRef(false);
 
-    useEffect(() => {
-        async function loadRecommendations() {
-            if(result.gaps.length === 0){
-                return;
-            }
-
-            if(hasRequestedRecommendations.current){
-                return;
-            }
-            hasRequestedRecommendations.current = true;
-
-            setIsLoading(true);
-            const response = await getRecommendations(
-                result.score,
-                result.gaps
-            );
-
-            if(response){
-                setRecommendations(response);
-
-            }else{
-                setRecommendationError(true)
-            }
-            setIsLoading(false);
+    async function loadRecommendations() {
+        if(result.gaps.length === 0){
+            return;
         }
+
+        setIsLoading(true);
+        setRecommendationError(false);
+        setRecommendations(null);
+
+        const response = await getRecommendations(
+            result.score,
+            result.gaps
+        );
+
+        if(response){
+            setRecommendations(response);
+
+        }else{
+            setRecommendationError(true)
+        }
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        if(hasRequestedRecommendations.current){
+                return;
+            }
+        hasRequestedRecommendations.current = true;
         loadRecommendations();
     }, [result]);
 
@@ -160,16 +163,34 @@ function Results({ result, onRestart }: ResultProps){
               </div>
             )}
 
-            {recommendationError && (
-              <Alert>
-                <AlertTriangle />
-                <AlertTitle>Recommendations unavailable</AlertTitle>
-                <AlertDescription>
-                  Recommendations are temporarily unavailable. Please try again
-                  later.
-                </AlertDescription>
-              </Alert>
-            )}
+    {recommendationError && (
+        <Alert>
+        <AlertTriangle />
+
+        <AlertTitle>
+         Recommendations unavailable
+        </AlertTitle>
+
+        <AlertDescription>
+        <div className="space-y-3">
+        <p>
+          We couldn't generate recommendations right now.
+          Your assessment results are still available.
+        </p>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={loadRecommendations}
+          disabled={isLoading}
+        >
+          Try Again
+        </Button>
+        </div>
+        </AlertDescription>
+        </Alert>
+    )}
 
             {recommendations && (
   <div className="recommendations">

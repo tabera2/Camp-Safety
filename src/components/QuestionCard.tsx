@@ -1,4 +1,14 @@
 import type { Question } from "../types/assessment";
+import {Button} from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+
 
 interface QuestionCardProps {
     question: Question;
@@ -10,40 +20,58 @@ function QuestionCard({
     onAnswer
  }: QuestionCardProps) {
     return (
-        <section>
-            <p>{question.category}</p>
+  <Card className="w-full">
+    <CardHeader>
+      <Badge variant="secondary" className="w-fit">
+        {question.category}
+      </Badge>
 
-            <h2>{question.question}</h2>
-            {question.type == "boolean" && (
-                <div>
-                    <button 
-                    type="button" 
-                    onClick={() => onAnswer("Yes")}>
-                        Yes
-                        </button>
-                    <button 
-                    type="button" 
-                    onClick={() => onAnswer("No")}>
-                        No
-                        </button>
-                </div>
-            )}
+      <CardTitle className="text-2xl">
+        {question.question}
+      </CardTitle>
 
-            {question.type == "multiple-choice" && (
-                <div>
-                    {question.options?.map((option) => (
-                        <button 
-                        type="button" 
-                        key={option}
-                        onClick={() => onAnswer(option)}
-                        >
-                            {option}
-                        </button>
-                    ))}
-                </div>
-            )}
-        </section>
-    );
+      <CardDescription>
+        Select the answer that best describes your camp.
+      </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+      <div className="flex flex-col gap-3">
+        {question.type === "boolean" && (
+          <>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => onAnswer("Yes")}
+            >
+              Yes
+            </Button>
+
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => onAnswer("No")}
+            >
+              No
+            </Button>
+          </>
+        )}
+
+        {question.type === "multiple-choice" &&
+          question.options?.map((option) => (
+            <Button
+              key={option}
+              variant="outline"
+              size="lg"
+              onClick={() => onAnswer(option)}
+            >
+              {option}
+            </Button>
+          ))}
+      </div>
+    </CardContent>
+  </Card>
+);
 }
 
 export default QuestionCard

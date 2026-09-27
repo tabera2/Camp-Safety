@@ -1,7 +1,9 @@
 import { use, useState } from 'react'
 import QuestionCard from './components/QuestionCard'
+import Results from './components/Results';
 import {questions} from "./data/questions";
 import type { Answer } from './types/assessment';
+import { calculatedRisk } from './lib/riskEngine';
 import './App.css'
 
 function App() {
@@ -31,16 +33,15 @@ function App() {
   }
 
     //console.log(answers)
+    console.log(calculatedRisk(answers));
 
     const progress = ((currentQuestion + 1) / questions.length) * 100;
+    const RiskResult = calculatedRisk(answers);
   return (
     <main>
       <h1> Camp Safety</h1>
       {isComplete ? (
-        <section>
-          <h2>Assessment Complete</h2>
-          <p>Your responses have been recorded.</p>
-        </section> 
+        <Results result={RiskResult} />
       ):( 
         <>
 

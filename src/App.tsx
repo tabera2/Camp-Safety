@@ -4,6 +4,7 @@ import Results from './components/Results';
 import {questions} from "./data/questions";
 import type { Answer } from './types/assessment';
 import { calculatedRisk } from './lib/riskEngine';
+import { saveAssessment } from './lib/saveAssessment';
 import './App.css'
 
 function App() {
@@ -16,11 +17,16 @@ function App() {
       questionId: questions[currentQuestion].id,
       answer: answer,
     };
-    
-    setAnswers([...answers, newAnswer])
+
+    const updatedAnswers = [...answers, newAnswer];
+    setAnswers(updatedAnswers)
+
     if (currentQuestion < questions.length - 1){
       setCurrentQuestion(currentQuestion + 1);
     }else{
+      const result = calculatedRisk(updatedAnswers);
+      console.log("Calling saveAssessment");
+      saveAssessment(updatedAnswers, result.score);
       setIsComplete(true);
     }
   }

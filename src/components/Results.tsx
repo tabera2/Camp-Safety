@@ -1,7 +1,8 @@
 import type { RiskResult } from "../types/assessment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 //import type { RiskResult } from "../types/assessment";
 import { getRecommendations } from "../lib/getRecommendations";
+import ReactMarkdown from "react-markdown";
 
 
 
@@ -13,12 +14,18 @@ function Results({ result }: ResultProps){
     const [recommendations, setRecommendations] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [recommendationError, setRecommendationError] = useState(false);
+    const hasRequestedRecommendations = useRef(false);
 
     useEffect(() => {
         async function loadRecommendations() {
             if(result.gaps.length === 0){
                 return;
             }
+
+            if(hasRequestedRecommendations.current){
+                return;
+            }
+            hasRequestedRecommendations.current = true;
 
             setIsLoading(true);
             const response = await getRecommendations(
@@ -76,8 +83,11 @@ function Results({ result }: ResultProps){
                 )}
 
                 {recommendations && (
-                    <div>
-                        <p>{recommendations}</p>
+                    <div className="recommendations">
+                        <ReactMarkdown>
+                            {recommendations}
+                        </ReactMarkdown>
+                        
                     </div>
                 )}
             </div>

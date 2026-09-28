@@ -11,7 +11,7 @@ Camp Safety is a full-stack web application that helps summer camp administrator
 - Identification of specific safety gaps
 - AI-generated recommended actions based on assessment results
 - Persistent storage of assessments and responses
-- Retry handling for temporary AI service failures
+- Retry button for handling temporary AI service failures
 - Responsive interface for desktop, tablet, and mobile
 - Ability to restart and complete multiple assessments
 
